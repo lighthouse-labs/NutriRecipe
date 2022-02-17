@@ -8,6 +8,7 @@ import Button  from "./components/Button";
 import Recipes from "./routes/recipes";
 import Empty from "./components/NewRecipe/Empty"
 import { Modal } from "@mui/material";
+import MyRecipes from "./routes/myrecipes";
 
 
 const App = (props) => {
@@ -105,7 +106,9 @@ const App = (props) => {
 
         </Modal>  
         
-      <Recipes/>
+     
+      {<Recipes user={user}/>}
+
       </div>
     </div>
   );

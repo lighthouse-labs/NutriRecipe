@@ -23,7 +23,7 @@ render(
       <Route path="recipes" element={<Recipes />} />
       
       <Route path="newrecipe" element={<NewRecipe />} />
-      <Route path="myrecipes" element={<MyRecipes />} />
+      <Route path="myrecipes" element={<MyRecipes/>} />
       <Route path="admin" element={<Admin />} />
       {/* {token && <Route path="secret" element={<Secret />}/>} */ }
     </Routes>
