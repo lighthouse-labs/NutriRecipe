@@ -26,7 +26,7 @@ class RecipesController < ApplicationController
     if @recipe.save
       render :json => @recipe
     else
-      notice 'error saving!'
+      puts 'error saving!'
     end
   end
 
@@ -36,7 +36,7 @@ class RecipesController < ApplicationController
     if @recipe.save
       render :json => @recipe
     else
-      notice 'error saving!'
+      puts 'error saving!'
     end
   end
 

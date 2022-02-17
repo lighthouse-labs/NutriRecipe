@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import RecipeList from "../components/RecipeList";
 import "../App.css";
 import RecipePage1 from "../components/RecipePage1";
+import Alert from '../components/MyRecipes/SimpleAlert'
 
-export default function MyRecipes() {
-  const [myrecipes, setMyRecipes] = useState([]);
+export default function MyRecipes(props) {
+  const [myRecipes, setMyRecipes] = useState([]);
   const [selectRecipe, setSelectRecipe] = useState(null);
   const [comments,setComments] = useState([])
   const fetchRecipes = () => {
@@ -14,8 +15,12 @@ export default function MyRecipes() {
       .get("/recipes") // You can simply make your requests to "/api/whatever you want"
       .then((response) => {
         // handle success
-        // console.log("response----->",response.data)
-        setMyRecipes(response.data);
+        let myTempRecipes = response.data.filter(recipe => {
+          if (recipe.user_id === props.user.id) {
+            return recipe;
+          }})
+        console.log(myTempRecipes)
+        setMyRecipes(myTempRecipes);
       })
       .catch((err) => {
         console.log(err);
@@ -40,12 +45,15 @@ export default function MyRecipes() {
     <main>
       <div style={{ display: "flex", flexDirection: "row" }}></div>
       {/* {console.log("COMMENTS__>",comments)} */}
-      {selectRecipe ? (
-        <RecipePage1 selectRecipe={selectRecipe} comments={comments}/>
-        
-      ) : (
-        <RecipeList setSelectRecipe={setSelectRecipe} recipes={recipes} />
-      )}
+   
+      <RecipeList setSelectRecipe={setSelectRecipe} recipes={myRecipes} user={props.user} />
+      {!myRecipes || myRecipes.length === 0 && 
+        <Alert 
+            title={"No Recipe Found!"}
+            content={"You have no recipe."}
+            emph={"Let's create one now!"}
+            url={"/newrecipe"}
+        />}
     </main>
   );
 }

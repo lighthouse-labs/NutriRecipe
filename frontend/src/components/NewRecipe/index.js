@@ -82,7 +82,8 @@ export default function Recipe(props) {
       transition(ERROR_SAVE_VALIDATION);
     } else {*/
       let recipe = {...inputrecipe};
-      recipe.user_id = 1 //hard-coded
+      console.log('index new recipe page',props.user)
+      recipe.user_id = props.user.id
       transition(SAVING);
       let json_ingredients = JSON.stringify(recipe.ingredients);
       recipe.ingredients = json_ingredients;
