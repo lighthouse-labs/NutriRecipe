@@ -51,13 +51,9 @@ const Form = (props) => {
 
   const categories=[].concat(props.cates);
 
-  const [imageSelected, setImageSelected] = useState(recipe.image_url)
-
-  console.log(recipe);
+  const [imageSelected, setImageSelected] = useState(recipe.image_url);
 
   const mode = props.mode;
-  console.log(recipe.category_id)
-  console.log(categories[recipe.category_id - 1]);
 
   return (
     <div className="NewRecipe">
@@ -220,10 +216,8 @@ const Form = (props) => {
 
       <Box display="flex" flex-direction="row" justifyContent="center" paddingTop={5}>
         <Stack direction="row" spacing={10} >
-          <Button variant="contained" onClick={()=>props.onSave(recipe)}>Save your Recipe</Button>
-          <Button variant="outlined" href="#outlined-buttons">
-            View Nutrition Info
-          </Button>
+          <Button variant="contained" onClick={()=>props.onSave(recipe)}>Post your Recipe</Button>
+         
         </Stack>
       </Box>
     

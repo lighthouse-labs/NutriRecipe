@@ -93,7 +93,7 @@ export default function Recipe(props) {
           console.log(response);
           recipe = {...response.data};
           console.log(recipe);
-          let string_ingredients = JSON.parse(recipe.ingredients);
+          let string_ingredients = eval(recipe.ingredients);
           console.log(string_ingredients);
           console.log(string_ingredients.class);
           console.log ('Create mode - Recipe saved!');
@@ -162,6 +162,7 @@ export default function Recipe(props) {
   console.log('recipe', recipe)
   console.log('mode === SHOW ', mode === SHOW )
   console.log(mode);
+  console.log('user is', props.user);
   return (
   
     <div>

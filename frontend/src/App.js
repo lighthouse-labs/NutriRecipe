@@ -115,8 +115,8 @@ const App = (props) => {
       <Routes>
         <Route path="/" element={<Recipes />} />
         <Route path="recipes" element={<Recipes />} />      
-        <Route path="newrecipe" element={<NewRecipe />} />
-        <Route path="myrecipes" element={<MyRecipes />} />
+        <Route path="newrecipe" element={<NewRecipe user={user}/>} />
+        <Route path="myrecipes" element={<MyRecipes user={user}/>} />
       {/* {token && <Route path="secret" element={<Secret />}/>} */ }
     </Routes>
         <Outlet/>
