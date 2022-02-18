@@ -5,6 +5,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import '@fontsource/roboto/700.css';
+
 
 export default function RecipeSteps(props) {
   // let temp_steps = props.list.steps;
@@ -18,12 +20,12 @@ export default function RecipeSteps(props) {
 
   return (
     <>
-       <Card elevation={10} sx={{ minWidth: 275 }}>
+      <Card elevation={10} sx={{ minWidth: 275, maxHeight :350, overflow:"auto" }}>
       <CardContent>
-        <Typography sx={{ fontSize: 28 }} color="text.secondary" gutterBottom>
-            Recipe Steps         
+        <Typography variant="h5" color="text.secondary" gutterBottom = "true">
+            How to make {props.list.name}       
         </Typography>
-        <Typography variant="h5" component="div" paragraph="true">
+        <Typography variant="h6" color="text.secondary" component="div" paragraph="true">
           <ol style = {{textAlign:'left'}}>
               {recipeSteps.map(step=>{
                 return <li>{`${step}.`}</li>

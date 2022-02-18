@@ -6,8 +6,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Recipes from "./routes/recipes";
 import { Modal, TextField } from "@mui/material";
-import SearchIcon from "@material-ui/icons/Search"
-import Search from "./components/Search";
+
 import {
   BrowserRouter,
   Routes,
@@ -47,7 +46,6 @@ const App = (props) => {
       .then(resp => resp.json())
       .then(data => {
         setUser(data)
-        //console.log(data)
       })
     } else {
       setUser('');

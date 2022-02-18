@@ -95,9 +95,9 @@ export default function NutriContent(props) {
 
     });
 
-    let arrayOfData = [carb, protein, sugar, fat, fiber]
+    const arrayOfData = [carb, protein, sugar, fat, fiber]
 
-    let roundedData = arrayOfData.map(data => {
+    const roundedData = arrayOfData.map(data => {
 
       return Math.round(data * 100) / 100
 

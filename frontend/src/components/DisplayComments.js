@@ -1,9 +1,14 @@
 import React from 'react'
 import OneComment from './OneComment';
 import { Container } from '@mui/material';
+import Button from '@mui/material/Button';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
+
 
 const DisplayComments = (props) => {
-  console.log(props.comments.comments);
+ 
+  const buttonStyle = { margin: '10px 0 0 0' }
+
 
   const arrayOfComments = props.comments.comments.map(comment => {
     if (props.list.id === comment.recipe_id) {
@@ -13,8 +18,9 @@ const DisplayComments = (props) => {
   })
   return (
     <Container >
+      {/* <Button  onClick={props.hideComments} style={buttonStyle} variant='contained' color='primary'>Hide Comments</Button> */}
       <h1>Comments</h1>
-      {arrayOfComments}
+      {arrayOfComments.reverse()}
     </Container>
     
   )

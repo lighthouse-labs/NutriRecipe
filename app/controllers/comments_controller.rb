@@ -31,8 +31,7 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(
       :user_id,
       :recipe_id,
-      :value,
-      
+      :value,      
     )
   end
 end

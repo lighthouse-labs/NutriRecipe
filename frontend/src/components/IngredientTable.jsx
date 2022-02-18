@@ -7,6 +7,7 @@ import TableCell from "@mui/material/TableCell";
 import Paper from "@mui/material/Paper";
 import { AutoSizer, Column, Table } from "react-virtualized";
 
+
 const styles = (theme) => ({
   flexContainer: {
     display: "flex",
@@ -161,12 +162,11 @@ const VirtualizedTable = withStyles(styles, { defaultTheme })(
 
 
 export default function IngredientTable1(props) {
-  console.log("prosfrmIngrdientTable",props)
   const ingredientObj = eval(props.list.ingredients);
   
   return (
     
-    <Paper style={{ height: 420, width: "auto" }}>
+    <Paper elevation={10} style={{ height: 420, width: "auto" }}>
       <VirtualizedTable
         rowCount={ingredientObj.length}
         rowGetter={({ index }) => ingredientObj[index]}
@@ -179,13 +179,13 @@ export default function IngredientTable1(props) {
           },
           {
             width: 200,
-            label: "quantity",
+            label: "Quantity",
             dataKey: "quantity",
             numeric: true,
           },
           {
             width: 200,
-            label: "unit",
+            label: "Unit",
             dataKey: "unit",
             numeric: true,
           }, 
