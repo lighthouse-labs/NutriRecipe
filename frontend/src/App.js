@@ -32,8 +32,6 @@ const App = (props) => {
   const handleSignInClose = () => setSignInOpen(false); 
 
 
-
-
   useEffect(() => {
     const token = localStorage.getItem("token")
 
@@ -110,8 +108,8 @@ const App = (props) => {
       <Routes>
         <Route path="/" element={<Recipes user={user} />} />
         <Route path="recipes" element={<Recipes user={user}/>} />      
-        <Route path="newrecipe" element={<NewRecipe user={user} />} />
-        <Route path="myrecipes" element={<MyRecipes user={user} />} />
+        <Route path="newrecipe" element={<Recipes user={user} newRecipe={true} />} />
+        <Route path="myrecipes" element={<Recipes user={user} myRecipes={true} />} />
       {/* {token && <Route path="secret" element={<Secret />}/>} */ }
     </Routes>
         <Outlet/>

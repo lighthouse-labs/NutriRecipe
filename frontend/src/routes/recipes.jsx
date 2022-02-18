@@ -31,6 +31,7 @@ export default function Recipes(props) {
   const [selectRecipe, setSelectRecipe] = useState(props.selectRecipe || null);
   const [comments,setComments] = useState(props.comments || [])
   const [ratings,setRatings] = useState([]);
+
   const fetchRecipes = () => {
     axios
       .get("/recipes") // You can simply make your requests to "/api/whatever you want"
@@ -96,7 +97,7 @@ export default function Recipes(props) {
   }
 
   const saveRecipe = (inputRecipe) => {
-   if (inputRecipe.name === null
+   if (inputRecipe.name === ''
     || inputRecipe.ingredients === null 
     || inputRecipe.category_id === null
     || inputRecipe.estimated_time === null
@@ -159,34 +160,34 @@ export default function Recipes(props) {
     })
   }
 
+  const viewRecipe = (recipe) => {
+    setSelectRecipe(recipe);
+    transition(SHOW);
+  };
+
   useEffect(() => {
     fetchComments();
-<<<<<<< HEAD
     fetchCategories();
-=======
     fetchRatings();
->>>>>>> main
     if (!props.recipes) {
       fetchRecipes();
     }
   }, []);
-
-  const { mode, transition, back } = useVisualMode(
-    selectRecipe ? SHOW  : EMPTY
-  );
 
   // return (
   //   <main>
   //     <div style={{ display: "flex", flexDirection: "row" }}></div>
   //     {/* {console.log("COMMENTS__>",comments)} */}
   //     {selectRecipe ? (
-  //       <RecipePage1 
+  //       <RecipePage1
   //         selectRecipe={selectRecipe}
   //         comments={comments}
   //         user={props.user}
   //         viewRecipe={props.viewRecipe}
   //         onEdit={props.onEdit}
   //         onDelete={props.onDelete}
+  //         fetchComments={fetchComments} 
+  //         ratings={ratings}
   //       />
   //     ) : (
   //       <RecipeList 
@@ -196,48 +197,43 @@ export default function Recipes(props) {
   //         viewRecipe={props.viewRecipe}
   //         onEdit={props.onEdit}
   //         onDelete={props.onDelete}
+  //         comments = {comments}
   //       />
   //     )}
   //   </main>
   // );
 
+  const newRecipe = props.newRecipe || false; //True if user clicks "Add a new recipe" link
+  const myRecipes = props.myRecipes || false; // True if user clicks "My Recipe" link
+  const { mode, transition, back } = useVisualMode(CREATE)  
+ /*   newRecipe ? CREATE : myRecipes ? EMPTY : selectRecipe ? SHOW : EMPTY
+  );*/
+
+  console.log('newRecipe = ', newRecipe, 'mode = ', mode);
+  console.log('myRecipes = ', myRecipes, 'mode = ', mode);
+
   return (
   
     <main>
-<<<<<<< HEAD
-      {mode === EMPTY && <Empty 
-        viewRecipe={()=>transition(SHOW)}
-        onEdit={()=>{transition(EDIT)}}
-        onDelete={destroy}
+      {mode === EMPTY && <Empty
         setSelectRecipe={setSelectRecipe}
         recipes={recipes}
         user={props.user}
+        onView={viewRecipe}
+        onEdit={()=>{transition(EDIT)}}
+        onDelete={destroy}
         comments={comments}
       />}
 
       {mode === SHOW &&
         <Show
-          selectRecipe={props.selectRecipe||{}}
-          //selectRecipe={selectRecipe}
-=======
-      <div style={{ display: "flex", flexDirection: "row" }}></div>
-      {/* {console.log("COMMENTS__>",comments)} */}
-      {selectRecipe ? (
-        <RecipePage1 fetchComments={fetchComments} selectRecipe={selectRecipe} comments={comments} user={props.user}ratings={ratings}/>
-        
-      ) : (
-        <RecipeList 
->>>>>>> main
-          setSelectRecipe={setSelectRecipe}
+          selectRecipe={selectRecipe}
+          comments={comments}
           user={props.user}
-          recipes={recipes}
-          comments = {comments}
-          viewRecipe={props.viewRecipe}
-          onDelete={()=>transition(CONFIRM)}
-          onEdit={()=>{
-            console.log('view = Edit')
-            transition(EDIT)
-          }}
+          onEdit={()=>{transition(EDIT)}}
+          onDelete={destroy}
+          fetchComments={fetchComments} 
+          ratings={ratings}
         />}
 
       {mode === CREATE && <Form cates={categories} 

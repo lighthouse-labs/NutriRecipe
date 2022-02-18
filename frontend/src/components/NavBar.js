@@ -106,8 +106,8 @@ const ResponsiveAppBar = (props) => {
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
                     {/*page*/}
-                    {page==='Add New Recipe' && <Link1  to="/newrecipe" newRecipe={true} myRecipe={false}>Add a new Recipe</Link1>}
-                    {page==='My Recipes' && <Link1  to="/myrecipes" myRecipe={true} newRecipe={false} myRecipe={true}>My Recipes</Link1>}
+                    {page==='Add New Recipe' && <Link1  to="/newrecipe">Add a new Recipe</Link1>}
+                    {page==='My Recipes' && <Link1 to="/myrecipes">My Recipes</Link1>}
                   </Typography>
 
                 </MenuItem>
@@ -133,8 +133,8 @@ const ResponsiveAppBar = (props) => {
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {/*page*/}
-                {page==='Add New Recipe' && <Link1  to="/newrecipe" newRecipe={true} myRecipe={false}>Add a new Recipe</Link1>}
-                {page==='My Recipes' && <Link1 to="/myrecipes" newRecipe={false} myRecipe={true}>My Recipes</Link1>}
+                {page==='Add New Recipe' && <Link1  to="/newrecipe">Add a new Recipe</Link1>}
+                {page==='My Recipes' && <Link1 to="/myrecipes">My Recipes</Link1>}
 
               </Button>
             ))}

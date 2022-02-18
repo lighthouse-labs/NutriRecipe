@@ -18,13 +18,31 @@ import IngredientList from "./IngredientList"
 
 const Form = (props) => {
   const { selectRecipe, setSelectRecipe } = props;
-  const [ingredients, setIngredients] = React.useState(props.selectRecipe.ingredients || [{name:"",unit:"",quantity:0}]);
-  
-  //const [steps, setSteps] = React.useState(props.selectRecipe.steps ||'');
+  const [ingredients, setIngredients] = useState([{name:"", unit:"", quantity:0}]);
+  const [imageSelected, setImageSelected] = useState(useState(''));
+  const [steps, setSteps] = useState('');
+  let recipeName = '';
+  let recipeDescription = '';
+  let recipeEstimatedTime = 0;
+  let recipeServingSize = 0;
+  let recipeCategoryId = 0;
+  let recipeImageUrl = '';
 
-  const setSteps=(steps)=>{
-    setSelectRecipe({...selectRecipe,steps})
+  if (props.selectRecipe) {
+    setIngredients(props.selectRecipe.ingredients);
+    setImageSelected(props.selectRecipe.image_url);
+    setSteps(props.selectRecipe.steps)
+    recipeName = props.selectRecipe.name;
+    recipeDescription = props.selectRecipe.description;
+    recipeEstimatedTime = props.selectRecipe.estimated_time;
+    recipeServingSize = props.selectRecipe.serving_size;
+    recipeCategoryId = props.selectRecipe.category_id;
+    recipeImageUrl = props.selectRecipe.image_url;
   }
+
+  // const setSteps=(steps)=>{
+  //   setSelectRecipe({...selectRecipe,steps})
+  // }
 
   const addIngredient=()=>{
     setIngredients([...ingredients,{name:"",unit:"",quantity:0}]);
@@ -49,19 +67,13 @@ const Form = (props) => {
     let newRecipe = {...selectRecipe,[event.target.name]:event.target.value};
     setSelectRecipe(newRecipe, ()=>console.log(selectRecipe));
   }
-
-  const categories=[].concat(props.cates);
-
-  const [imageSelected, setImageSelected] = useState(selectRecipe.image_url)
-  // const [category, setCategory] = React.useState(selectRecipe.category_id);
-
   
-
   useEffect(()=>{
     let newRecipe = {...selectRecipe,ingredients};
     setSelectRecipe(newRecipe)
   },[ingredients]);
 
+  const categories = props.cates;
   const mode = props.mode;
 
   return (
@@ -85,7 +97,7 @@ const Form = (props) => {
             noValidate
             autoComplete="off"
           >
-            <TextField required name="name" label='Recipe name' variant="outlined" onChange={handleChange} defaultValue={selectRecipe.name}/>
+            <TextField required name="name" label='Recipe name' variant="outlined" onChange={handleChange} defaultValue={recipeName}/>
      
           </Box>
           <Box
@@ -96,7 +108,7 @@ const Form = (props) => {
             noValidate
             autoComplete="off"
           >
-            <TextField required name="description" label="Recipe Description" variant="outlined" onChange={handleChange} defaultValue={selectRecipe.description}/>
+            <TextField required name="description" label="Recipe Description" variant="outlined" onChange={handleChange} defaultValue={recipeDescription}/>
           </Box>
           <Box
               component="form"
@@ -112,14 +124,14 @@ const Form = (props) => {
             name="estimated_time"
             label="Time estimated (mins)"
             onChange={handleChange}
-            defaultValue={selectRecipe.estimated_time}
+            defaultValue={recipeEstimatedTime}
           />
           <TextField
             required
             name="serving_size"
             label="Serving size (people)"
             onChange={handleChange}
-            defaultValue={selectRecipe.serving_size}
+            defaultValue={recipeServingSize}
           />
           <FormControl required variant="standard" sx={{ m: 1, minWidth: 350 }}>
             <InputLabel sx={{ fontSize: 18 }}>Category</InputLabel>
@@ -127,7 +139,7 @@ const Form = (props) => {
               required
               name="category_id"
               // value={category}
-              value={selectRecipe.category_id}
+              value={recipeCategoryId}
               onChange={handleChange}
               label="Set a Category"
             >
@@ -178,14 +190,14 @@ const Form = (props) => {
               multiline
               maxRows={100}
               variant="standard"
-              steps={selectRecipe.steps}
+              steps={steps}
               setSteps={setSteps}
               name="steps"
             />
           </Box>
         </AccordionDetails>
       </Accordion>
-      { selectRecipe.image_url &&
+      { selectRecipe &&
       <Accordion expanded={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -196,7 +208,7 @@ const Form = (props) => {
         </AccordionSummary>
         <AccordionDetails >
           <Box > {/*}style={{ flex: "1 1 50%" }} */}
-            <img src={selectRecipe.image_url} alt="" width={500} height={300} mode='fit'/>
+            <img src={recipeImageUrl} alt="" width={500} height={300} mode='fit'/>
           </Box>
         </AccordionDetails>
       </Accordion>
@@ -207,10 +219,10 @@ const Form = (props) => {
             aria-controls="panel2a-content"
             id="panel2a-header"
           >
-          {!selectRecipe.image_url &&
+          {!selectRecipe &&
           <Typography sx={{ fontSize: 20 }}>Upload an Image*</Typography>
           }
-          { selectRecipe.image_url &&
+          { recipeImageUrl &&
           <Typography sx={{ fontSize: 20 }}>Replace the Current Image*</Typography>
           }
             </AccordionSummary>
