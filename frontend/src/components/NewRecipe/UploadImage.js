@@ -24,7 +24,7 @@ const Upload = (props) => {
       ).then((response)=>{
         console.log(response.data.url);
         image_url=response.data.url;
-        props.recipe.image_url=image_url;
+        props.selectRecipe.image_url=image_url;
         setLoading(false);
         props.setImageSelected("")
       });

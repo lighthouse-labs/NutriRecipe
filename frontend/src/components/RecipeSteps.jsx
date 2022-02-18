@@ -7,8 +7,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export default function RecipeSteps(props) {
-  const recipeSteps = props.list.steps.split('.')
-  recipeSteps.pop()
+  // let temp_steps = props.list.steps;
+  // let recipeSteps = [props.list.steps];
+  // if (temp_steps.search('.') > 0 ) {
+  //   recipeSteps = [].concat(props.list.steps.split('.'));
+  //   recipeSteps.pop();
+  // }
+
+  const recipeSteps = props.list.steps.split('.');
+
   return (
     <>
        <Card elevation={10} sx={{ minWidth: 275 }}>

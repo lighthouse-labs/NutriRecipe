@@ -29,7 +29,7 @@ export default function Recipe(props) {
   const ERROR_LOAD = "ERROR_LOAD";
 
   const [categories, setCategories] = useState([]);
-  const [recipe, setRecipe] = useState({});
+  const [selectRecipe, setSelectRecipe] = useState({});
   const [recipes, setRecipes] = useState([]);
   const [comments, setComments] = useState([]);
 
@@ -72,7 +72,7 @@ export default function Recipe(props) {
       .get(`/recipes/${id}`)
       .then((response) => {
         console.log(response.data[0].name); // The entire response from the Rails API
-        props.setRecipe(response.data);
+        props.setSelectRecipe(response.data);
       })
       .catch((err) => {
         console.log(err);
@@ -95,28 +95,27 @@ export default function Recipe(props) {
   }
 
   const saveRecipe = (inputRecipe) => {
-   if (recipe.name === null
-    || recipe.ingredients === null 
-    || recipe.category_id === null
-    || recipe.estimated_time === null
-    || recipe.description === null
-    || recipe.serving_size === null
-    || recipe.steps === null
-    || recipe.image_url === null
-    ) {
-      transition(ERROR_SAVE_VALIDATION, true);
-    } else {
+  //  if (inputRecipe.name === null
+  //   || inputRecipe.ingredients === null 
+  //   || inputRecipe.category_id === null
+  //   || inputRecipe.estimated_time === null
+  //   || inputRecipe.description === null
+  //   || inputRecipe.serving_size === null
+  //   || inputRecipe.steps === null
+  //   || inputRecipe.image_url === null
+  //   ) {
+  //     transition(ERROR_SAVE_VALIDATION, true);
+  //   } else {
       transition(SAVING);
-      inputRecipe={...recipe};
       inputRecipe.user_id = props.user.id
       let recipeDB = convertRecipeToSaveDB(inputRecipe);
-      if (!recipe.id) {
+      if (!selectRecipe.id) {
         axios
         .post("/recipes", recipeDB)
         .then((response) => {
           let tempRecipe = {...response.data};
-          setRecipe(()=>convertRecipeToShowUI(tempRecipe))
-          console.log('recipe to show on UI after converted to string:',recipe)
+          setSelectRecipe(()=>convertRecipeToShowUI(tempRecipe))
+          console.log('recipe to show on UI after converted to string:',selectRecipe)
           transition(SHOW)
         })
         .catch(error => {
@@ -125,10 +124,10 @@ export default function Recipe(props) {
         })
       } else {
         axios
-        .put(`/recipes/${recipe.id}`,recipe)
+        .put(`/recipes/${selectRecipe.id}`,selectRecipe)
         .then((response) => {
           let tempRecipe = {...response.data};
-          setRecipe(()=>convertRecipeToShowUI(tempRecipe));
+          setSelectRecipe(()=>convertRecipeToShowUI(tempRecipe));
           transition(SHOW)
         })
         .catch(error => {
@@ -137,11 +136,11 @@ export default function Recipe(props) {
         })
       }
       
-    }
+    // }
   }
 
   const { mode, transition, back } = useVisualMode(
-    Object.keys(recipe).length > 0 ? SHOW  : CREATE
+    Object.keys(selectRecipe).length > 0 ? SHOW  : CREATE
   );
 
   function destroy(recipe) {
@@ -178,36 +177,36 @@ export default function Recipe(props) {
         viewRecipe={()=>transition(SHOW)}
         onEdit={()=>{transition(EDIT)}}
         onDelete={destroy}
-        setSelectRecipe={setRecipe}
+        setSelectRecipe={setSelectRecipe}
         recipes={recipes}
         user={props.user}
       />}
       {mode === SHOW &&
         <Show
           // selectRecipe={props.recipe}
-          selectRecipe={recipe}
+          selectRecipe={selectRecipe}
           user={props.user}
           onDelete={()=>transition(CONFIRM)}
           onEdit={()=>{
             console.log('view = Edit')
-            // console.log(props.recipe);
+            // console.log(props.selectRecipe);
             transition(EDIT)
           }}
           comments = {comments}
         />}
         { /*   <Recipes 
-        //     selectRecipe={recipe}
+        //     selectRecipe={selectRecipe}
         //     onDelete={()=>transition(CONFIRM)}
         //     onEdit={()=>{transition(EDIT)}}
         //     user={props.user}
         //     comments={comments}
         //   />
         // </div>} */ }
-      {mode === CREATE && <Form cates={categories} onCancel={back} onSave={saveRecipe} onDelete={destroy} setRecipe={setRecipe} recipe={recipe}/>}
+      {mode === CREATE && <Form cates={categories} onCancel={back} onSave={saveRecipe} onDelete={destroy} setSelectRecipe={setSelectRecipe} selectRecipe={selectRecipe}/>}
       {mode === SAVING && <Status message = {'Saving...'} />}
       {mode === DELETING && <Status message = {'Deleting...'} />}
-      {mode === CONFIRM && <Confirm message = {'Delete? ... Really?'} onCancel={back} onConfirm={() => destroy(recipe)}/>}
-      {mode === EDIT && <Form cates={categories} recipe={recipe} onCancel={back} onSave={saveRecipe} onDelete={destroy} setRecipe={setRecipe} mode="EDIT"/>}
+      {mode === CONFIRM && <Confirm message = {'Delete? ... Really?'} onCancel={back} onConfirm={() => destroy(selectRecipe)}/>}
+      {mode === EDIT && <Form cates={categories} selectRecipe={selectRecipe} onCancel={back} onSave={saveRecipe} onDelete={destroy} setSelectRecipe={setSelectRecipe} mode="EDIT"/>}
       {mode === ERROR_SAVE && <Error message={'Error saving encountered. Sorry!'} onClose={back} />}
       {mode === ERROR_DELETE && <Error message={'Error deleting encountered. Sorry!'} onClose={back} />}
       {mode === ERROR_SAVE_VALIDATION && <Error message={'Please fill data in all required fields (*)'} onClose={back} />}

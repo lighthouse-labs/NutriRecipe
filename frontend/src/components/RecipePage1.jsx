@@ -54,10 +54,10 @@ export default function Recipe(props) {
             <DisplayComments comments={props.comments} list={props.selectRecipe} />
           </Item>
         </Grid>
-        <Grid item xs={4}>
+        {/* <Grid item xs={4}>
           {props.selectRecipe.user_id===props.user.id && <Button onClick={props.onEdit}> Edit </Button>}
           {props.selectRecipe.user_id===props.user.id && <Button onClick={props.onDelete}>Delete</Button>}
-        </Grid>
+        </Grid> */}
       </Grid>
     
     </Box>
