@@ -38,8 +38,6 @@ export default function Recipes(props) {
       fetchRecipes();
     }
   }, []);
-
-  console.log(props.selectRecipe);
   
   return (
     <main>

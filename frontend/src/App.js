@@ -47,7 +47,7 @@ const App = (props) => {
       .then(resp => resp.json())
       .then(data => {
         setUser(data)
-        console.log(data)
+        //console.log(data)
       })
     } else {
       setUser('');
@@ -91,8 +91,6 @@ const App = (props) => {
         return null
     }
       
-        
-    
   }
 
   return (
@@ -112,10 +110,10 @@ const App = (props) => {
         {/* <Search />         */}
         {/* <Recipes /> */}
       <Routes>
-        <Route path="/" element={<Recipes user={user}/>} />
+        <Route path="/" element={<Recipes user={user} />} />
         <Route path="recipes" element={<Recipes user={user}/>} />      
-        <Route path="newrecipe" element={<NewRecipe user={user}/>} />
-        <Route path="myrecipes" element={<MyRecipes user={user}/>} />
+        <Route path="newrecipe" element={<NewRecipe user={user} />} />
+        <Route path="myrecipes" element={<MyRecipes user={user} />} />
       {/* {token && <Route path="secret" element={<Secret />}/>} */ }
     </Routes>
         <Outlet/>

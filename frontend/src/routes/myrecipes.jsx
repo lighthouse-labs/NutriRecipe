@@ -79,9 +79,8 @@ export default function MyRecipes(props) {
     fetchComments();
   }, []);
 
-  console.log(comments);
-  
   return (
+
     <main>
       <div style={{ display: "flex", flexDirection: "row" }}></div>
       {/* {console.log("COMMENTS__>",comments)} */}
@@ -91,20 +90,31 @@ export default function MyRecipes(props) {
       ) : (
         <RecipeList setSelectRecipe={setSelectRecipe} recipes={myRecipes} />
       )} */}
-      {selectRecipe && <RecipePage1 selectRecipe={selectRecipe} comments={comments} user={props.user}/>}
+      {/* {selectRecipe && <RecipePage1 
+        selectRecipe={selectRecipe}
+        comments={comments}
+        user={props.user}
+      />} */}
       {!selectRecipe && myRecipes.length === 0 && 
         <Alert 
-        title={"No Recipe Found!"}
-        content={"You have no recipe."}
-        emph={"Let's create one now!"}
-        url={"/newrecipe"}
+          title={"No Recipe Found!"}
+          content={"You have no recipe."}
+          emph={"Let's create one now!"}
+          url={"/newrecipe"}
       />}
       {!selectRecipe && myRecipes.length > 0 && 
-        <RecipeList setSelectRecipe={setSelectRecipe} recipes={myRecipes} user={props.user} />
-        // <Routes>
-        //   <Route path="/" element={<Recipes user={props.user} recipes={myRecipes}/>} />
-        // </Routes>
+        <>
+          {/* <RecipeList 
+            setSelectRecipe={setSelectRecipe}
+            recipes={myRecipes}
+            user={props.user}
+          /> */}
+          <Routes>
+            <Route path="recipes" element={<Recipes user={props.user} recipes={myRecipes}/>} />      
+          </Routes>
+        </>
        
+
       }
     </main>
   );

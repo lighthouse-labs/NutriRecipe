@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Form from '../components/NewRecipe/Form'
-// import Show from '../components/NewRecipe/Show'; // Recipe detail page
 import Show from '../components/RecipePage1'; // Recipe detail page
 import Empty from '../components/RecipeList'; // Main page
 import Status from '../components/NewRecipe/Status';
