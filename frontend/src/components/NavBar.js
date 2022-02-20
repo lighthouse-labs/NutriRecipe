@@ -106,8 +106,10 @@ const ResponsiveAppBar = (props) => {
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
                     {/*page*/}
-                    {page==='Add New Recipe' && <Link1  to="/newrecipe">Add a new Recipe</Link1>}
-                    {page==='My Recipes' && <Link1 to="/myrecipes">My Recipes</Link1>}
+                    {/* {page==='Add New Recipe' && <Link1  to="/newrecipe" underline="none">Add a new Recipe</Link1>} */}
+                    {/* {page==='My Recipes' && <Link1 to="/myrecipes" underline="none">My Recipes</Link1>} */}
+                    {page==='My Recipes' && <Button variant="contained" onClick={()=>{window.location.href="/myrecipes"}} underline="none">My Recipes</Button>}
+                  
                   </Typography>
 
                 </MenuItem>
@@ -133,9 +135,10 @@ const ResponsiveAppBar = (props) => {
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {/*page*/}
-                {page==='Add New Recipe' && <Link1  to="/newrecipe">Add a new Recipe</Link1>}
-                {page==='My Recipes' && <Link1 to="/myrecipes">My Recipes</Link1>}
-
+                {/* {page==='Add New Recipe' && <Link1  to="/newrecipe">Add a new Recipe</Link1>} */}
+                {/* {page==='My Recipes' && <Link1 to="/myrecipes" underline="none">My Recipes</Link1>} */}
+                {page==='My Recipes' && <Button variant="contained" onClick={()=>{window.location.href="/myrecipes"}} underline="none">My Recipes</Button>}
+               
               </Button>
             ))}
           </Box>
@@ -143,7 +146,7 @@ const ResponsiveAppBar = (props) => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton style={{color: "#ffffff"} }onClick={handleOpenUserMenu} sx={{ p: 0 }} size={'small'}>
-                { name ? name : "Menu" }
+                { name ? name : "User?" }
                 <KeyboardArrowDownIcon />
               </IconButton>
             </Tooltip>

@@ -15,13 +15,22 @@ class RatingsController < ApplicationController
     @rating = Rating.new
   end
 
+  def update
+    @rating = Rating.find params[:id]
+    @rating.update(rating_params)
+    if @rating.save
+      render :json => @rating
+    else
+      puts 'error saving!'
+    end
+  end
+
   def create
     @rating = Rating.new(rating_params)
 
     if @rating.save
       render :json => @rating
-    else
-      notice 'error saving!'
+      
     end
   end
 
@@ -31,8 +40,7 @@ class RatingsController < ApplicationController
     params.require(:rating).permit(
       :recipe_id,
       :user_id,
-      :rating,
-      
+      :value,      
     )
   end
 end

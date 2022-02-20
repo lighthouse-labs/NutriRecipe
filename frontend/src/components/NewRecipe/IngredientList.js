@@ -6,6 +6,10 @@ import IngredientItem from './IngredientItem';
 
 
 const NewIngredientList = (props) => {
+  let ingredients = [];
+  if (props.ingredients) {
+    ingredients = [].concat(props.ingredients);
+  }
   return (
     <div className="NewIngredientList">
       <Box
@@ -19,7 +23,7 @@ const NewIngredientList = (props) => {
         <Fab color="primary" label="Add a new Ingredient"onClick={props.addIngredient}>
           <AddIcon />
         </Fab>
-        {props.ingredients.map((ingredient, index) => {
+        {ingredients.map((ingredient, index) => {
           return (
             <IngredientItem 
               ingredient = {ingredient} 

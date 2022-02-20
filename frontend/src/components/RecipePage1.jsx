@@ -40,7 +40,7 @@ export default function Recipe(props) {
       return (
         <AddComment fetchComments={props.fetchComments} hideComment={closeNewComment} list={props.selectRecipe} user={ props.user }/>
       );
-    } else {
+    } else  if (props.user){
       return (
         <Button
           onClick={openNewComment}
@@ -51,6 +51,8 @@ export default function Recipe(props) {
           Add Comment
         </Button>
       );
+    } else {
+      return null
     }
   };
 
@@ -68,17 +70,15 @@ export default function Recipe(props) {
         <Grid container spacing={0.5}>
           <Grid item xs={4}>
             <Item>
-              <AverageRating
-                list={props.selectRecipe}
-                ratings={props.ratings}
-              />
               <RecipeCard selectRecipe={props.selectRecipe} list={props.selectRecipe}
-                ratings={props.ratings}/>
+                ratings={props.ratings}
+                user={props.user}
+                setSelectRecipe={props.setSelectRecipe}
+              />
             </Item>
           </Grid>
           <Grid item xs={4}>
             <Item>
-              {" "}
               <IngredientTable list={props.selectRecipe} />
             </Item>
           </Grid>
@@ -87,7 +87,7 @@ export default function Recipe(props) {
               <NutriContent list={props.selectRecipe} />
             </Item>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <Item>
               <RecipeSteps list={props.selectRecipe} />
             </Item>
@@ -95,26 +95,13 @@ export default function Recipe(props) {
           <Grid item xs={4}>
             {renderNewComment()}
           </Grid>
-          <Grid xs={6}>
+          <Grid xs={8}>
             <DisplayComments
               hideComments={closeComments}
               comments={props.comments}
               list={props.selectRecipe}
             />
           </Grid>
-
-          <Grid item xs={8}>
-            {props.selectRecipe.user_id === props.user.id && (
-              <Button onClick={props.onEdit}> Edit </Button>
-            )}
-            {props.selectRecipe.user_id === props.user.id && (
-              <Button onClick={props.onDelete}>Delete</Button>
-            )}
-          </Grid>
-          {/* <Grid item xs={4}>
-            {props.selectRecipe.user_id===props.user.id && <Button onClick={props.onEdit}> Edit </Button>}
-            {props.selectRecipe.user_id===props.user.id && <Button onClick={props.onDelete}>Delete</Button>}
-          </Grid> */}
         </Grid>
       </Box>
     </>

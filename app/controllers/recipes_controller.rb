@@ -30,6 +30,7 @@ class RecipesController < ApplicationController
     end
   end
 
+
   def create
     @recipe = Recipe.new(recipe_params)
 
@@ -52,7 +53,7 @@ class RecipesController < ApplicationController
       :steps,
       :serving_size,
       :estimated_time,
-      :rating,
+      :average_rating,
       :image_url
     )
   end

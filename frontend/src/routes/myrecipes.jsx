@@ -1,66 +1,104 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import RecipeList from "../components/RecipeList";
-import "../App.css";
-import RecipePage1 from "../components/RecipePage1";
-import Alert from '../components/My Recipes/SimpleAlert'
-import ConfirmAlert from "../components/My Recipes/ConfirmAlert";
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom";
-import Recipes from "./recipes";
+import Form from '../components/NewRecipe/Form'
+// import Show from '../components/NewRecipe/Show'; // Recipe detail page
+import Show from '../components/RecipePage1'; // Recipe detail page
+import Empty from '../components/My Recipes/Empty'; // Main page
+import Status from '../components/NewRecipe/Status';
+import Confirm from '../components/NewRecipe/Confirm';
+import Error from '../components/NewRecipe/Error';
+import useVisualMode from '../components/NewRecipe/hooks/useVisualMode';
+import { convertToRaw } from 'draft-js'
+
+const styles = {
+  paperContainer: {
+      height: "1000",
+      backgroundImage: `url(${"https://res.cloudinary.com/de6puygvt/image/upload/v1645342161/recipes/wood-table-top-blur-kitchen-counter-room-background_254791-1293_zrvkre.jpg"})`
+  }
+};
 
 export default function MyRecipes(props) {
-  const [myRecipes, setMyRecipes] = useState([]);
-  const [selectRecipe, setSelectRecipe] = useState(null);
-  const [comments,setComments] = useState([]);
+  const EMPTY = "EMPTY";
+  const NONE = "NONE";
+  const SHOW = "SHOW";
+  const CREATE = "CREATE";
+  const SAVING = "SAVING";
+  const DELETING = "DELETING";
+  const CONFIRM = "CONFIRM";
+  const EDIT = "EDIT";
+  const ERROR_SAVE = "ERROR_SAVE";
+  const ERROR_DELETE = "ERROR_DELETE";
+  const ERROR_SAVE_VALIDATION = "ERROR_SAVE_VALIDATION";
+  const ERROR_LOAD = "ERROR_LOAD";
+
+  const [categories, setCategories] = useState([]);
+  const [recipe, setRecipe] = useState({});
+  const [recipes, setRecipes] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [ratings,setRatings] = useState([]);
+  const user = props.user;
+
+
+  // const converRTEtoShowUI = (RTEtext) => {
+  //   // const content = RTEtext.getCurrentContent().getPlainText();
+  //   const content = JSON.stringify(convertToRaw(RTEtext))
+  //   console.log (content);
+  //   return content;
+  // }
+
+  const convertRecipeToSaveDB = (recipeUI) => {
+    let json_ingredients = JSON.stringify(recipeUI.ingredients);
+    let recipeDB = {...recipeUI, "ingredients": json_ingredients};
+    return recipeDB;
+  }
+
+  const convertRecipeToShowUI = (recipeDB) => {
+    let string_ingredients = eval(recipeDB.ingredients);
+    let recipeUI = {...recipeDB, "ingredients": string_ingredients};
+    // if (recipeDB.id > 10) {
+    //   let steps_text = converRTEtoShowUI(recipeDB.steps);
+    //   recipeUI = {...recipeDB, "steps": steps_text};
+    // }
+
+    return recipeUI;
+  }
+
 
   const fetchMyRecipes = (user) => {
+    if(!user) {
+      return
+    }
     axios
-      .get("/recipes") // You can simply make your requests to "/api/whatever you want"
+      .get("/recipes")
       .then((response) => {
         // handle success
-        let myTempRecipes = response.data.filter(recipe => {
+        let filtered = response.data.filter(recipe => {
           if (recipe.user_id === user.id) {
             return recipe;
-          }})
-        console.log(myTempRecipes)
-        setMyRecipes(myTempRecipes);
+          }
+        });
+        let converted = filtered.map(recipe => {
+          let temp_recipe = convertRecipeToShowUI(recipe);
+            return temp_recipe;
+        })
+        setRecipes(converted);
+        transition(EMPTY);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+  const fetchCategories = () => {
+    axios
+    .get("/categories")
+    .then((response) => {
+      setCategories(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
-  // const convertRecipeToSaveDB = (recipeUI) => {
-  //   let json_ingredients = JSON.stringify(recipeUI.ingredients);
-  //   let recipeDB = {...recipeUI, "ingredients": json_ingredients};
-  //   return recipeDB;
-  // }
-  // const convertRecipeToShowUI = (recipeDB) => {
-  //   let string_ingredients = eval(recipeDB.ingredients);
-  //   let recipeUI = {...recipeDB, "ingredients": string_ingredients};
-  //   return recipeUI;
-  // }
-  // function destroyMyRecipe(recipe) {
-  //   // transition(DELETING, true);
-  //   console.log(`Deleting recipe id = ${recipe.id}`);
-  //   axios
-  //   .delete(`/recipes/${recipe.id}`, recipe)
-  //   .then((response)=>{
-  //     let tempRecipes = myRecipes.filter(tempRecipe => {
-  //       if (tempRecipe.id !== recipe.id) {
-  //         return tempRecipe;
-  //       }
-  //       setMyRecipes(tempRecipes);
-  //     })})
-  //   .catch(error => {
-  //     console.log(error);
-  //   })
-  // }
   const fetchComments = ()=> {
     axios
       .get("/comments")
@@ -71,51 +109,169 @@ export default function MyRecipes(props) {
         console.log(err);
       })
   }
-  useEffect(() => {
-    fetchMyRecipes(props.user);
-  }, []);
 
-  useEffect(() => {
+  const fetchRatings = ()=> {
+    axios
+      .get("/ratings")
+      .then((response) =>{
+        setRatings(response.data);
+      })
+      .catch((err) =>{
+        console.log(err);
+      })
+  }
+
+  const saveRecipe = (inputRecipe) => {
+   if (!inputRecipe
+    || inputRecipe.name === null
+    || !inputRecipe.ingredients
+    || inputRecipe.ingredients.indexOf([{name:"",unit:"",quantity:0}]) >= 0
+    || inputRecipe.category_id === null
+    || inputRecipe.estimated_time === null
+    || inputRecipe.description === null
+    || inputRecipe.serving_size === null
+    || inputRecipe.steps === null
+    || inputRecipe.image_url === null
+    ) {
+      setRecipe(inputRecipe);
+      transition(ERROR_SAVE_VALIDATION, false);
+    } else {
+      transition(SAVING);
+      inputRecipe.user_id = props.user.id
+      let recipeDB = convertRecipeToSaveDB(inputRecipe);
+      console.log("recipe before saving to DB:",recipeDB)
+      if (!recipe) {
+        axios
+        .post("/recipes", recipeDB)
+        .then((response) => {
+          let tempRecipe = {...response.data};
+          setRecipe(()=>convertRecipeToShowUI(tempRecipe))
+          console.log('recipe to show on UI after converted to string:',recipe)
+          transition(SHOW)
+        })
+        .catch(error => {
+          console.log('error', error);
+          transition(ERROR_SAVE, true);
+        })
+      } else {
+        console.log('edited recipe before sending to DB:', recipe);
+        axios
+        .put(`/recipes/${recipe.id}`,recipeDB)
+        .then((response) => {
+          let tempRecipe = {...response.data};
+          setRecipe(()=>convertRecipeToShowUI(tempRecipe));
+          transition(SHOW)
+        })
+        .catch(error => {
+          console.log('error', error);
+          transition(ERROR_SAVE, true);
+        })
+      }
+    }
+  }
+
+  function destroy(recipe, user) {
+    transition(DELETING, true);
+    console.log(`Deleting recipe id = ${recipe.id}`);
+    axios
+    .delete(`/recipes/${recipe.id}`, recipe)
+    .then((response)=>{
+      let filtered = response.data.filter(recipe => {
+        if (recipe.user_id === user.id) {
+          let temp_recipe = convertRecipeToShowUI(recipe);
+          return temp_recipe;
+        }
+      })
+      console.log(filtered);
+      setRecipes(filtered);
+      transition(EMPTY)
+    })
+    .catch(error => {
+      console.log(error);
+      transition(ERROR_DELETE);
+    })
+  }
+
+  const viewRecipe = (recipe) => {
+    setRecipe(recipe);
+    transition(SHOW);
+  }
+
+  const editRecipe = (recipe) => {
+    setRecipe(recipe);
+    transition(EDIT);
+  }
+
+  const confirmRecipe = (recipe) => {
+    setRecipe(recipe);
+    transition(CONFIRM);
+  }
+
+  const addRecipe = () => {
+    setRecipe(null);
+    transition(CREATE);
+  }
+
+  useEffect (()=>{
+    fetchMyRecipes(user);
+  },[user]);
+
+  useEffect (()=>{
+    fetchCategories();
     fetchComments();
-  }, []);
+    fetchRatings();
+  },[]);
+
+  const { mode, transition, back } = useVisualMode(props.mode);
 
   return (
-
-    <main>
-      <div style={{ display: "flex", flexDirection: "row" }}></div>
-      {/* {console.log("COMMENTS__>",comments)} */}
-      {/* {selectRecipe ? (
-        <RecipePage1 selectRecipe={selectRecipe} comments={comments}/>
-        
-      ) : (
-        <RecipeList setSelectRecipe={setSelectRecipe} recipes={myRecipes} />
-      )} */}
-      {/* {selectRecipe && <RecipePage1 
-        selectRecipe={selectRecipe}
-        comments={comments}
+  
+    <div>
+      {mode === EMPTY && <Empty style={styles.paperContainer}
+        viewRecipe={viewRecipe}
+        onEdit={editRecipe}
+        onDelete={confirmRecipe}
+        onAdd={addRecipe}
+        setSelectRecipe={setRecipe}
+        recipes={recipes}
         user={props.user}
-      />} */}
-      {!selectRecipe && myRecipes.length === 0 && 
-        <Alert 
-          title={"No Recipe Found!"}
-          content={"You have no recipe."}
-          emph={"Let's create one now!"}
-          url={"/newrecipe"}
+        comments = {comments}
+        ratings={ratings}
       />}
-      {!selectRecipe && myRecipes.length > 0 && 
-        <>
-          {/* <RecipeList 
-            setSelectRecipe={setSelectRecipe}
-            recipes={myRecipes}
-            user={props.user}
-          /> */}
-          <Routes>
-            <Route path="recipes" element={<Recipes user={props.user} recipes={myRecipes}/>} />      
-          </Routes>
-        </>
-       
-
+      {mode === SHOW &&
+        <Show
+          selectRecipe={recipe}
+          user={props.user}
+          onEdit={editRecipe}
+          onDelete={confirmRecipe}
+          comments = {comments}
+          ratings={ratings}
+        />
+        }
+      {mode === CREATE && 
+        <Form 
+          cates={categories}
+          onCancel={back}
+          onSave={saveRecipe}
+          ratings={ratings}
+          setRecipe={setRecipe}
+        />
       }
-    </main>
-  );
+      {mode === SAVING && <Status message = {'Saving...'} />}
+      {mode === DELETING && <Status message = {'Deleting...'} />}
+      {mode === CONFIRM && <Confirm message = {'Delete?... Really?'} user={user} onCancel={back} onConfirm={() => destroy(recipe,user)}/>}
+      {mode === EDIT && <Form 
+        cates={categories}
+        ratings={ratings}
+        recipe={recipe}
+        setRecipe={setRecipe}
+        onCancel={back}
+        onSave={saveRecipe}
+      />}
+      {mode === ERROR_SAVE && <Error message={'Error saving encountered. Sorry!'} onClose={back} />}
+      {mode === ERROR_DELETE && <Error message={'Error deleting encountered. Sorry!'} onClose={back} />}
+      {mode === ERROR_SAVE_VALIDATION && <Error message={'Please fill data in all required fields (*)'} onClose={back} />}
+      {mode === ERROR_LOAD && <Error message={'Error loading data encountered. Sorry!'} onClose={back} />}
+    </div>
+  )
 }

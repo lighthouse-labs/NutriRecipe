@@ -38,11 +38,12 @@ const NewIngredientItem = (props) => {
               onChange={props.onChange}
               value={props.ingredient.unit}
             >
-              <MenuItem value={"grams"}>grams</MenuItem>
-              <MenuItem value={"milligrams"}>milligrams</MenuItem>
-              <MenuItem value={"ounces"}>ounces</MenuItem>
-              <MenuItem value={"tablespoons"}>tablespoons</MenuItem>
-              <MenuItem value={"teaspoons"}>teaspoons</MenuItem>
+              <MenuItem key={1} value={"grams"}>grams</MenuItem>
+              <MenuItem key={2} value={"milligrams"}>milligrams</MenuItem>
+              <MenuItem key={3} value={"kilograms"}>kilograms</MenuItem>
+              <MenuItem key={4} value={"ounces"}>ounces</MenuItem>
+              <MenuItem key={5} value={"tablespoons"}>tablespoons</MenuItem>
+              <MenuItem key={6} value={"teaspoons"}>teaspoons</MenuItem>
             </Select>
           </FormControl>
           <TextField
@@ -53,7 +54,7 @@ const NewIngredientItem = (props) => {
             value={props.ingredient.quantity}
             
           />
-          <Fab color="primary" aria-label="Delete">
+          <Fab color="secondary" aria-label="Delete">
             <DeleteIcon onClick={props.onDelete}/>
           </Fab>
         </div>

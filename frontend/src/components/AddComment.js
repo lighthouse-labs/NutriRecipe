@@ -51,11 +51,11 @@ const AddComment = (props) => {
           <Box
             component="form"
             sx={{
-              '& > :not(style)': { m: 1, width: '103ch' },
+              '& > :not(style)': { m: 1, width: '50ch' },
             }}
             noValidate
             autoComplete="off"
-        >
+          >
           Add your comment below:
           <TextField required name="name" label='Add Comment' variant="outlined" onChange={e => handleCommentChange(e.target.value)} defaultValue={commentValue}/>
             
