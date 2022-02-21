@@ -40,7 +40,7 @@ export default function ResponsiveGrid(props) {
         )
       } else {
         arrayOfRecipes = props.recipes.map((recipe, index) => (
-          <Grid item xs={4} sm={4} md={4} key={index}>
+          <Grid item xs={4} key={index}>
             <RecipeListItem
               setSelectRecipe={props.setSelectRecipe}
               recipe={recipe}
@@ -64,32 +64,13 @@ export default function ResponsiveGrid(props) {
 
       
     
-  const renderSearch = () => {
-    if (props.openSearch !== false) {
-      return <SearchBar 
-        searchRecipe={props.searchRecipe} closeSearch={ props.closeSearch}/>
-    } else {
-      return (
-        <Button variant="contained" onClick={props.showSearch}>Search Recipes</Button>
-      )
-      }
-  }
+ 
 
   return (
-    <div className="search-location">
-      <br></br>
-      {renderSearch()}
-    <Box
-      sx={{
-        flexGrow: 1,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        padding: 5,
-      }}
-    >
-     
-      <Grid
+   <div>
+     <Box>
+        <Grid
+        style={{padding : "5px 50px 10px 50px"}}
         container
         spacing={{ sm: 2, md: 3 }}
         columns={{ xs: 4, sm: 5, md: 20 }}

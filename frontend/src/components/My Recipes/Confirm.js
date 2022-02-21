@@ -19,13 +19,11 @@ const style = {
   p: 4,
 };
 
-export default function ConfirmDialog(props) {
+export default function Confirm(props) {
   return (
 
       <Box
         open={true}
-        onCancel={props.onCancel}
-        onConfirm={props.onConfirm}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         sx={style}
@@ -39,10 +37,10 @@ export default function ConfirmDialog(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onCancel} autoFocus>
+          <Button onClick={props.onCancel} autofocus>
             Cancel
           </Button>
-          <Button onClick={props.onConfirm} color="red">
+          <Button onClick={props.onConfirm}>
             Confirm
           </Button>
         </DialogActions>

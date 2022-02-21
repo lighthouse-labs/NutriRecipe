@@ -96,7 +96,6 @@ export default function Recipe(props) {
           </Grid>
           <Grid item xs={6}>
             <Item>
-              {renderNewComment()}
               <Modal open={openAddComment}>
                 <AddComment fetchComments={props.fetchComments} hideComment={handleCloseComment} list={props.selectRecipe} user={ props.user }/>
             </Modal> 
@@ -108,6 +107,7 @@ export default function Recipe(props) {
           <Grid xs={6}>
             
             <Item>
+              {renderNewComment()}
             <DisplayComments
               hideComments={closeComments}
               comments={props.comments}

@@ -5,6 +5,9 @@ import RecipeList from "../components/RecipeList";
 import "../App.css";
 import RecipePage1 from "../components/RecipePage1";
 import { Button } from "@mui/material";
+import SearchBar from "../components/SearchBar";
+import Box from "@mui/material/Box";
+
 
 export default function Recipes(props) {
   const [recipes, setRecipes] = useState(props.recipes || []);
@@ -74,11 +77,34 @@ export default function Recipes(props) {
     }
   }, []);
 
+   const renderSearch = () => {
+    if (openSearch === true) {
+      return <SearchBar 
+        searchRecipe={searchRecipe} closeSearch={ closeSearch}/>
+    } else {
+      return (
+        <Button variant="contained" onClick={showSearch}>Search Recipes</Button>
+      )
+      }
+  }
+
 
   return (
     <main>
+       <div className="search-location">
+      <br></br>
+      {selectRecipe ? null : renderSearch()}
+      <Box
+        sx={{
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "row",
+            justifyContent: "center",
+        padding : "2px 0px 10px 0px"
+      }}/>
+          
+      </div>
       
-      <div style={{ display: "flex", flexDirection: "row" }}></div>
       {selectRecipe ? (
         <RecipePage1
           fetchComments={fetchComments}

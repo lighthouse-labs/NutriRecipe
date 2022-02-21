@@ -9,7 +9,13 @@ import Status from '../components/NewRecipe/Status';
 import Confirm from '../components/My Recipes/Confirm';
 import Error from '../components/NewRecipe/Error';
 import useVisualMode from '../components/NewRecipe/hooks/useVisualMode';
-import { convertToRaw } from 'draft-js'
+import { convertToRaw } from 'draft-js';
+import { Button } from "@mui/material"; 
+import Fab from '@mui/material/Fab';
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
+import { Box } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+
 
 export default function MyRecipes(props) {
   const EMPTY = "EMPTY";
@@ -29,7 +35,9 @@ export default function MyRecipes(props) {
   const [recipe, setRecipe] = useState({});
   const [recipes, setRecipes] = useState([]);
   const [comments, setComments] = useState([]);
-  const [ratings,setRatings] = useState([]);
+  const [ratings, setRatings] = useState([]);
+
+  
   const user = props.user;
   const [filterlist, setFilterList] = useState([]);
   const [openSearch, setOpenSearch] = React.useState(false);
@@ -202,7 +210,7 @@ export default function MyRecipes(props) {
     })
   }
 
-  const viewRecipe = (recipe) => {
+    const viewRecipe = (recipe) => {
     setRecipe(recipe);
     transition(SHOW);
   }
@@ -230,13 +238,31 @@ export default function MyRecipes(props) {
     fetchCategories();
     fetchComments();
     fetchRatings();
-  },[]);
+  }, []);
+
 
   const { mode, transition, back } = useVisualMode(props.mode);
   
   return (
   
     <div>
+      {props.user &&
+       <div>
+       <Box
+       sx={{
+         flexGrow: 1,
+         display: "flex",
+         flexDirection: "row",
+         justifyContent: "center",
+         padding: 5,
+        }}
+        >
+       <Fab color="primary"label="Add your Recipe"onClick={() => addRecipe()}>
+         <AddIcon />
+       </Fab>
+       </Box>
+       </div>
+      }
       {mode === EMPTY && <Empty
         viewRecipe={viewRecipe}
         onEdit={editRecipe}

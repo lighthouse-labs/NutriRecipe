@@ -20,7 +20,8 @@ import Paper from '@mui/material/Paper';
 
 const styles = {
   paperContainer: {
-      height: '100%',
+    height: '100%',
+    maxWidth: "1000px",
       backgroundImage: `url(${"https://res.cloudinary.com/de6puygvt/image/upload/v1645342161/recipes/wood-table-top-blur-kitchen-counter-room-background_254791-1293_zrvkre.jpg"})`
   }
 };
@@ -168,7 +169,7 @@ const Form = (props) => {
         </AccordionDetails>
       </Accordion>
       
-      <Accordion >
+      <Accordion style={{maxWidth: "1000px"}} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
