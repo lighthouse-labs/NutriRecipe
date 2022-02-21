@@ -3,7 +3,8 @@ import axios from "axios";
 import Form from '../components/NewRecipe/Form'
 import Show from '../components/RecipePage1'; // Recipe detail page
 // import Show from '../components/NewRecipe/Show'; // Recipe detail page
-import Empty from '../components/RecipeList'; // Main page
+// import Empty from '../components/RecipeList'; // Main page
+import Empty from '../components/My Recipes/Empty'
 import Status from '../components/NewRecipe/Status';
 import Confirm from '../components/My Recipes/Confirm';
 import Error from '../components/NewRecipe/Error';
@@ -30,7 +31,23 @@ export default function MyRecipes(props) {
   const [comments, setComments] = useState([]);
   const [ratings,setRatings] = useState([]);
   const user = props.user;
-
+  const [filterlist, setFilterList] = useState([]);
+  const [openSearch, setOpenSearch] = React.useState(false);
+  const showSearch = () => setOpenSearch(true);
+  const closeSearch = () => {
+    setOpenSearch(false);
+    setFilterList(recipes);
+  };
+  const searchRecipe = (query) => {
+    
+    setFilterList(recipes.filter((recipe) => {
+      if (recipe.name.toLowerCase().includes(query.toLowerCase())) {
+        return true;
+      } else {
+        return false;
+      }
+    }));
+  };
 
   // const converRTEtoShowUI = (RTEtext) => {
   //   // const content = RTEtext.getCurrentContent().getPlainText();
@@ -230,6 +247,10 @@ export default function MyRecipes(props) {
         user={props.user}
         comments = {comments}
         ratings={ratings}
+        searchRecipe={searchRecipe}
+        closeSearch={closeSearch}
+        showSearch={showSearch}
+        openSearch={openSearch}
       />}
       {mode === SHOW &&
         <Show
