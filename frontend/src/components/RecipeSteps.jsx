@@ -9,8 +9,36 @@ import '@fontsource/roboto/700.css';
 
 
 export default function RecipeSteps(props) {
-  const recipeSteps = props.list.steps.split('.')
+  let recipeSteps = props.list.steps.split('.')
   recipeSteps.pop()
+
+////////// Data Conversion ///////////////////////////////////////////////////////////////////
+// let stepShow = recipeSteps;
+// if (props.selectRecipe) {
+      let stringSteps = props.list.steps;
+      console.log(stringSteps);
+      if (stringSteps.indexOf("blocks") > -1 && stringSteps.indexOf("key") > -1) {
+        let convertedSteps = "";
+        let posStart = stringSteps.indexOf("text") + 7;
+        let posStop = posStart;
+        let slice = "";
+  
+        while (posStart > 6) {
+          posStop = stringSteps.indexOf("type") - 3;
+          slice = stringSteps.slice(posStart, posStop);
+          convertedSteps = convertedSteps + slice;
+          stringSteps = stringSteps.slice(posStop + 7);
+          posStart = stringSteps.indexOf("text") + 7;
+  
+        }
+        console.log("Extractions: ", convertedSteps);
+        recipeSteps = convertedSteps.split('.');
+        recipeSteps.pop();
+      }
+  // }
+  console.log(recipeSteps);
+////////////////////////////////////////////////////////////////////////////////////////
+
   return (
     <>
       <Card elevation={10} sx={{ minWidth: 275, maxHeight :350, overflow:"auto" }}>
